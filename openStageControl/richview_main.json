@@ -156,7 +156,7 @@
             "typeTags": "",
             "decimals": 2,
             "target": "",
-            "ignoreDefaults": false,
+            "ignoreDefaults": true,
             "bypass": false
           },
           {
@@ -243,7 +243,7 @@
             "typeTags": "",
             "decimals": 2,
             "target": "midi:loopMIDI",
-            "ignoreDefaults": false,
+            "ignoreDefaults": true,
             "bypass": false
           },
           {
@@ -284,7 +284,7 @@
             "typeTags": "",
             "decimals": 2,
             "target": "midi:loopMIDI",
-            "ignoreDefaults": false,
+            "ignoreDefaults": true,
             "bypass": false
           },
           {
@@ -1660,8 +1660,8 @@
           },
           {
             "type": "button",
-            "top": 330,
-            "left": 770,
+            "top": 340,
+            "left": 610,
             "id": "HOME",
             "visible": true,
             "interaction": true,
@@ -2961,8 +2961,8 @@
           },
           {
             "type": "panel",
-            "top": 20,
-            "left": 890,
+            "top": 50,
+            "left": 910,
             "id": "panel_4",
             "visible": true,
             "interaction": true,
@@ -3475,6 +3475,38 @@
                 "tabs": []
               }
             ]
+          },
+          {
+            "type": "text",
+            "top": 0,
+            "left": 910,
+            "id": "ABS_LOC",
+            "visible": true,
+            "width": 440,
+            "height": 40,
+            "expand": "false",
+            "colorBg": "auto",
+            "colorText": "auto",
+            "colorWidget": "auto",
+            "colorStroke": "auto",
+            "colorFill": "auto",
+            "alphaStroke": "auto",
+            "alphaFillOff": "auto",
+            "alphaFillOn": "auto",
+            "padding": "auto",
+            "css": "",
+            "vertical": false,
+            "wrap": false,
+            "align": "center",
+            "value": "SET ABSOUTE POSITION",
+            "default": "",
+            "linkId": "",
+            "script": "",
+            "address": "auto",
+            "preArgs": "",
+            "typeTags": "",
+            "target": "",
+            "ignoreDefaults": false
           }
         ],
         "tabs": []
