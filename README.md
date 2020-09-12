@@ -36,10 +36,3 @@ Please make sure to update tests as appropriate.
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
-
-
-Python Packages:
-  aiosc:
-    pip3 install aiosc
-  Python OSC:
-    pip3 install python-osc
