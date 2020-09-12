@@ -28,6 +28,15 @@ Python3: https://www.python.org/downloads/
           pip3 install python-osc
 ```
 
+## Usage
+Edit "osc_visca_server.py" to match IP addresses of cameras
+
+Run the python file "osc_visca_server.py" to start the OSC to VISCA server
+
+Launch and run the Open Stage Control, open the "richview_main.json" session
+
+**This will need updating as the Open Stage Control panel is built out
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
