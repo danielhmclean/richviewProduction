@@ -1,0 +1,17 @@
+{
+    "camInfo": {
+                "numCamera": 3,
+                "camera1": {
+                            "ip" : "192.168.50.40",
+                            "title": "Camera1"
+                            },
+                "camera2": {
+                            "ip": "192.168.50.28",
+                            "title": "Camera2"
+                            },
+                "camera3": {
+                            "ip": "192.168.50.111",
+                            "title": "Camera3"
+                            }
+                }
+}

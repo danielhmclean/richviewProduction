@@ -45,7 +45,14 @@ from pythonosc import udp_client # for sending OSC
 from math import floor  # for fader
 import socket
 import binascii  # for printing the visca messages
+import json
 
+# --------------------------------------------------------
+# Load config from JSON file
+# --------------------------------------------------------
+with open('osc_visca_config.json') as json_file:
+    configs = json.load(json_file)
+    
 # --------------------------------------------------------
 # OSC server and client Settings (Open Stage Control)
 # --------------------------------------------------------
@@ -55,14 +62,20 @@ osc_send_port = 9002
 
 # --------------------------------------------------------
 #  Camera Settings
-# TODO: Put in JSON file
 # --------------------------------------------------------
-### VISCA sender (socket)
-camera_ip = '192.168.50.40'
-camipDic = {
-        "1":'192.168.50.40',
-        "2":'192.168.50.28',
-        "3":'192.168.50.111'}
+camInfo =configs["camInfo"]
+camipDic = {};
+# Get IP addrs from config json
+for this in range(camInfo["numCamera"]):
+    ix = this+1;#"0" is the ALL signal, so we need to skip it
+    thisCam = camInfo["camera"+str(ix)]
+    camipDic[str(ix)] = thisCam["ip"] 
+    
+print(camipDic)
+#camipDic = {
+#        "1":'192.168.50.40',
+#        "2":'192.168.50.28',
+#        "3":'192.168.50.111'}
 
 # Visca Port:
 camera_port = 52381
@@ -175,47 +188,14 @@ def panToHex(numP,numT):
 # ==============================================================
 # --------------------------------------------------------
 # Send Visca Command 
-# TODO: Cleanup, there only needs to be one
 # --------------------------------------------------------
-def send_message(message_string, camId = "1"):
-    camera_ip = camipDic[camId]
-    global sequence_number
-    #global received_message
-    payload_type = bytearray.fromhex('01 00')
-    payload = bytearray.fromhex(message_string)
-    payload_length = len(payload).to_bytes(2, 'big')
-    message = payload_type + payload_length + sequence_number.to_bytes(4, 'big') + payload
-    #if message_string == reset_sequence_number:
-    #    sequence_number = 1
-    #    #sequence_number = 4294967295
-    #else:
-    #    sequence_number += 1
-    sequence_number += 1
-    s.sendto(message, (camera_ip, camera_port))
-    #print(binascii.hexlify(message), 'sent to', camera_ip, camera_port, sequence_number)
-    # add a timeout in case we don't hear back
-    '''
-    try:
-        data = s.recvfrom(buffer_size)
-        received_message = binascii.hexlify(data[0])
-        print('Received', received_message)
-        data = s.recvfrom(buffer_size)
-        received_message = binascii.hexlify(data[0])
-        print('Received', received_message)
-    except socket.timeout: # s.settimeout(2.0) #above
-        received_message = 'No response from camera'
-        print(received_message)
-
-    #if received_message == b'01110003000000119051ff':
-    if received_message[0:4] == '0111':
-        display_message.set('Connected')
-    else:
-        display_message.set(received_message[0:4])
-    #'''
-    received_message = 'test'
-    return received_message
-
 def send_visca(message_string,camId="1"):
+    # 0 is for all, do a forloop
+    if camId =="0":
+        for thisKey in camipDic.keys():
+            received_message = send_visca(message_string, camId=thisKey)  
+        return received_message
+    
     camera_ip = camipDic[camId]
     global sequence_number
     payload_type = bytearray.fromhex('01 00')
@@ -368,7 +348,7 @@ def parse_osc_message(osc_address, osc_path, args):
                 convMsg = pan_absolute_position.replace('VV', panSpeed).replace('WW', str(tiltSpeed))
                 convMsg = convMsg.replace('Y1',absP[0]).replace('Y2',absP[1]).replace('Y3',absP[2]).replace('Y4',absP[3])
                 convMsg = convMsg.replace('Z1',absT[0]).replace('Z2',absT[1]).replace('Z3',absT[2]).replace('Z4',absT[3])
-                send_message(convMsg,camId)
+                send_visca(convMsg,camId)
                 
                 
             else: # when the button is released the osc_argument should be 0
@@ -382,7 +362,7 @@ def parse_osc_message(osc_address, osc_path, args):
             if args[0] > 0 or args[1] >0:
                 panSpeed = str(int(args[0])).zfill(2)
                 tiltSpeed = str(int(args[1])).zfill(2)
-                send_message(panDic[osc_command].replace('VV', panSpeed).replace('WW', str(tiltSpeed)),camId)
+                send_visca(panDic[osc_command].replace('VV', panSpeed).replace('WW', str(tiltSpeed)),camId)
             else: # when the button is released the osc_argument should be 0
                 send_visca(pan_stop,camId)
     else:
