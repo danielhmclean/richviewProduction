@@ -118,7 +118,9 @@ zoom_tele = '81 01 04 07 02 FF'
 zoom_wide = '81 01 04 07 03 FF'
 zoom_tele_variable = '81 01 04 07 2p FF' # p=0 (Low) to 7 (High)
 zoom_wide_variable = '81 01 04 07 3p FF' # p=0 (Low) to 7 (High)
+
 zoom_direct = '81 01 04 47 0p 0q 0r 0s FF' # pqrs: Zoom Position
+
 zoom_focus_direct = '81 01 04 47 0p 0q 0r 0s 0t 0u 0v 0w FF' # pqrs: Zoom Position  tuvw: Focus Position
 
 inquiry_lens_control = '81 09 7E 7E 00 FF'
@@ -147,7 +149,7 @@ panDic = {
 pan_absolute_position = '81 01 06 02 VV WW 0Y1 0Y2 0Y3 0Y4 0Z1 0Z2 0Z3 0Z4 FF' #Y is pan position, Z is tilt, VV is pan speed, WW is tilt speed
 
 # --------------------------------------------------------
-# Function convert absolute andgle 
+# Function convert absolute angle 
 # to VISCA command for BIRDDOG P200
 # --------------------------------------------------------
 def panToHex(numP,numT):
@@ -166,8 +168,6 @@ def panToHex(numP,numT):
     minT = 0xfe80 # -90
     maxT = 0x0480 # +90
     rangeT = 0x10000 + maxT - minT
-
-    # Unclear if we need to adjust for birddog P200 range or not
     
     # Convert neg to positive
     convP = numP - minPD
@@ -182,6 +182,31 @@ def panToHex(numP,numT):
     
     return(hex(absP)[2:].zfill(4),hex(absT)[2:].zfill(4))
     
+# --------------------------------------------------------
+# Function convert absolute zoom 
+# to VISCA command for BIRDDOG P200
+# --------------------------------------------------------
+def zoomToHex(numZ):
+    
+    minZD = 0
+    maxZD = 100
+    rangeZD = maxZD - minZD
+    
+    
+    minZ = 0x0000
+    maxZ = 0x4000
+    rangeZ = maxZ - minZ
+    
+    
+    # Convert neg to positive
+    convZ = numZ - minZD
+    
+    # Scale and cast
+    scaleZ = int(round(convZ/rangeZD*rangeZ))
+    
+    absZ = (minZ + scaleZ) & 0xffff
+    
+    return(hex(absZ)[2:].zfill(4))
     
 # ==============================================================
 #  VISCA (TO Birddog P200s) 
@@ -283,14 +308,14 @@ def parse_osc_message(osc_address, osc_path, args):
     global serverOSC_ip
     serverOSC_ip = osc_address[0]
     osc_path_list = osc_path.split('/')
-    #print (osc_path_list)
+    print (osc_path_list)
     camId = osc_path_list[1]
     osc_command = osc_path_list[2]
-    #print("ARGS:")
-    #print(args)
+#    print("ARGS:")
+#    print(args)
     osc_argument = args[0]
-    #print (osc_command)
-    #print (osc_argument)
+#    print (osc_command)
+#    print (osc_argument)
     if osc_command == 'camera_on':
         send_visca(camera_on,camId)
     elif osc_command == 'reset_sequence_number':
@@ -306,8 +331,18 @@ def parse_osc_message(osc_address, osc_path, args):
                 print('Memory set', memory_preset_number)
                 send_visca(memory_set.replace('p', memory_preset_number),camId)
     elif 'zoom' in osc_command:
-        if osc_argument > 0:
-            zoomSpeed = str(int(min(7,args[0])))
+        if 'zoom_direct' in osc_command:
+            absZ = zoomToHex(float(args[0]))
+#            print (absZ)
+            zoomCommand = zoom_direct.replace('p', absZ[0])
+            zoomCommand = zoomCommand.replace('q', absZ[1])
+            zoomCommand = zoomCommand.replace('r', absZ[2])
+            zoomCommand = zoomCommand.replace('s', absZ[3])
+#            print(zoomCommand)
+            send_visca(zoomCommand,camId)
+        elif osc_argument > 0:
+            zoomSpeed = str(int(min(7,args[0])))           
+            
             if osc_command == 'zoom_tele':
                 send_visca(zoom_tele,camId)
             elif osc_command == 'zoom_wide':
@@ -332,7 +367,7 @@ def parse_osc_message(osc_address, osc_path, args):
         global movement_speed
         movement_speed = osc_command[5:]
         send_osc('MovementSpeedLabel', movement_speed)
-        print('set speed to', movement_speed)
+#        print('set speed to', movement_speed)
     elif 'pan' in osc_command:
         
         # Absolute Position
@@ -340,7 +375,7 @@ def parse_osc_message(osc_address, osc_path, args):
             if args[0] > 0 and args[1] >0:
                 panSpeed = str(int(args[0])).zfill(2)
                 tiltSpeed = str(int(args[1])).zfill(2)
-                absP, absT = panToHex(int(args[2]),int(args[3]))
+                absP, absT = panToHex(float(args[2]),float(args[3]))
                 #print ("ABSOLUTE")
                 #print (absP)
                 #print (absT)

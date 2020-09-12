@@ -49,7 +49,8 @@
         "event": "value",
         "keyBinding": "L",
         "keyRepeat": true,
-        "keyType": "keydown"
+        "keyType": "keydown",
+        "lineWidth": "auto"
       },
       {
         "type": "script",
@@ -71,7 +72,8 @@
         "event": "value",
         "keyBinding": "L",
         "keyRepeat": true,
-        "keyType": "keydown"
+        "keyType": "keydown",
+        "lineWidth": "auto"
       },
       {
         "type": "panel",
@@ -157,7 +159,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "switch",
@@ -203,7 +206,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -244,7 +248,8 @@
             "decimals": 2,
             "target": "midi:loopMIDI",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -285,7 +290,8 @@
             "decimals": 2,
             "target": "midi:loopMIDI",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -323,7 +329,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": false,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "text",
@@ -355,10 +362,13 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           }
         ],
-        "tabs": []
+        "tabs": [],
+        "lineWidth": "auto",
+        "contain": true
       },
       {
         "type": "panel",
@@ -367,7 +377,7 @@
         "id": "panel_1",
         "visible": true,
         "interaction": true,
-        "width": 1380,
+        "width": 1450,
         "height": 500,
         "expand": "false",
         "colorBg": "#011c44",
@@ -436,8 +446,8 @@
             "sensitivity": 1,
             "steps": 17,
             "origin": "auto",
-            "value": 2,
-            "default": "",
+            "value": 3,
+            "default": 3,
             "linkId": "",
             "script": "set(\"pan_id\",get(\"pan_speed\"))",
             "address": "auto",
@@ -447,7 +457,9 @@
             "target": "",
             "ignoreDefaults": true,
             "bypass": false,
-            "touchAddress": ""
+            "touchAddress": "",
+            "lineWidth": "auto",
+            "knobSize": "auto"
           },
           {
             "type": "fader",
@@ -485,8 +497,8 @@
             "sensitivity": 1,
             "steps": 17,
             "origin": "auto",
-            "value": 2,
-            "default": "",
+            "value": 3,
+            "default": 3,
             "linkId": "",
             "script": "set(\"tilt_id\",get(\"tilt_speed\"))",
             "address": "auto",
@@ -496,7 +508,9 @@
             "target": "",
             "ignoreDefaults": true,
             "bypass": false,
-            "touchAddress": ""
+            "touchAddress": "",
+            "lineWidth": "auto",
+            "knobSize": "auto"
           },
           {
             "type": "button",
@@ -534,7 +548,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -572,7 +587,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -610,7 +626,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -648,7 +665,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -686,7 +704,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -724,7 +743,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -762,7 +782,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -800,7 +821,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -838,7 +860,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -876,7 +899,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -914,7 +938,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -952,7 +977,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -990,7 +1016,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1028,7 +1055,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1066,7 +1094,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1104,7 +1133,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1142,7 +1172,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1180,7 +1211,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1218,7 +1250,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1256,7 +1289,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1294,7 +1328,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1332,7 +1367,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1370,7 +1406,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1408,7 +1445,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1446,7 +1484,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1484,7 +1523,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": false,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1522,7 +1562,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1560,7 +1601,8 @@
             "decimals": 2,
             "target": "",
             "ignoreDefaults": true,
-            "bypass": false
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "text",
@@ -1592,7 +1634,8 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           },
           {
             "type": "text",
@@ -1624,7 +1667,8 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           },
           {
             "type": "text",
@@ -1656,7 +1700,8 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           },
           {
             "type": "button",
@@ -1687,14 +1732,15 @@
             "value": "",
             "default": "",
             "linkId": "",
-            "script": "",
-            "address": "/1/pan_home",
+            "script": "if (get(\"URH\") ==1) {\nsend(\"192.168.50.183:8002\",\"/\"+get(\"camera_id\")+\"/pan_home\",get(\"pan_speed\"),get(\"tilt_speed\"))\n} else {\nsend(\"192.168.50.183:8002\",\"/\"+get(\"camera_id\")+\"/pan_stop\",get(\"pan_speed\"),get(\"tilt_speed\"))\n}",
+            "address": "auto",
             "preArgs": "",
             "typeTags": "",
             "decimals": 2,
             "target": "",
-            "ignoreDefaults": false,
-            "bypass": false
+            "ignoreDefaults": true,
+            "bypass": false,
+            "lineWidth": "auto"
           },
           {
             "type": "switch",
@@ -1717,11 +1763,12 @@
             "padding": "auto",
             "css": "",
             "values": {
+              "All": 0,
               "Camera 1": 1,
               "Camera 2": 2,
               "Camera 3": 3
             },
-            "value": 1,
+            "value": "",
             "default": "",
             "linkId": "",
             "script": "",
@@ -1735,7 +1782,8 @@
             "layout": "horizontal",
             "gridTemplate": "",
             "mode": "tap",
-            "colorTextOn": "auto"
+            "colorTextOn": "auto",
+            "lineWidth": "auto"
           },
           {
             "type": "panel",
@@ -1846,7 +1894,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -1884,7 +1933,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -1922,7 +1972,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -1960,7 +2011,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -1998,7 +2050,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2036,7 +2089,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2074,7 +2128,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2112,7 +2167,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2150,7 +2206,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2188,7 +2245,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2226,7 +2284,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2264,10 +2323,13 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   }
                 ],
-                "tabs": []
+                "tabs": [],
+                "lineWidth": "auto",
+                "contain": true
               },
               {
                 "type": "tab",
@@ -2337,7 +2399,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2375,7 +2438,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2413,7 +2477,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2451,7 +2516,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2489,7 +2555,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2527,7 +2594,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2565,7 +2633,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2603,7 +2672,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2641,7 +2711,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "button",
@@ -2679,12 +2750,17 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   }
                 ],
-                "tabs": []
+                "tabs": [],
+                "lineWidth": "auto",
+                "contain": true
               }
-            ]
+            ],
+            "lineWidth": "auto",
+            "contain": true
           },
           {
             "type": "text",
@@ -2716,7 +2792,8 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           },
           {
             "type": "text",
@@ -2748,7 +2825,8 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           },
           {
             "type": "fader",
@@ -2786,8 +2864,8 @@
             "sensitivity": 1,
             "steps": 8,
             "origin": "auto",
-            "value": 2,
-            "default": "",
+            "value": 3,
+            "default": 3,
             "linkId": "",
             "script": "set(\"zoom_id\",get(\"zoom_speed\"))",
             "address": "auto",
@@ -2797,7 +2875,9 @@
             "target": "",
             "ignoreDefaults": true,
             "bypass": false,
-            "touchAddress": ""
+            "touchAddress": "",
+            "lineWidth": "auto",
+            "knobSize": "auto"
           },
           {
             "type": "text",
@@ -2829,7 +2909,8 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           },
           {
             "type": "text",
@@ -2861,7 +2942,8 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           },
           {
             "type": "text",
@@ -2893,7 +2975,8 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           },
           {
             "type": "text",
@@ -2925,7 +3008,8 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           },
           {
             "type": "text",
@@ -2957,7 +3041,8 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           },
           {
             "type": "panel",
@@ -2966,8 +3051,8 @@
             "id": "panel_4",
             "visible": true,
             "interaction": true,
-            "width": 440,
-            "height": 404.9382716049383,
+            "width": 520,
+            "height": 410,
             "expand": "false",
             "colorBg": "auto",
             "colorText": "auto",
@@ -2990,7 +3075,7 @@
             "value": "",
             "default": "",
             "linkId": "",
-            "script": "set(\"xy_cam1\",[get(\"xy_cam2\")[0],get(\"xy_cam2\")[1]])",
+            "script": "set(\"xy_cam1\",[get(\"xy_cam2\")[0],get(\"xy_cam2\")[1]])\nset(\"abs_zoom\",get(\"abs_zoom_live\"))",
             "address": "auto",
             "preArgs": "",
             "typeTags": "",
@@ -3052,7 +3137,7 @@
                     "alphaFillOn": "auto",
                     "padding": "auto",
                     "css": "",
-                    "label": "GO",
+                    "label": "GO Pan Tilt",
                     "on": 1,
                     "off": 0,
                     "mode": "tap",
@@ -3068,7 +3153,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "text",
@@ -3100,7 +3186,8 @@
                     "preArgs": "",
                     "typeTags": "",
                     "target": "",
-                    "ignoreDefaults": false
+                    "ignoreDefaults": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "input",
@@ -3135,7 +3222,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "input",
@@ -3170,7 +3258,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "text",
@@ -3202,7 +3291,8 @@
                     "preArgs": "",
                     "typeTags": "",
                     "target": "",
-                    "ignoreDefaults": false
+                    "ignoreDefaults": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "xy",
@@ -3251,10 +3341,205 @@
                     "target": "",
                     "ignoreDefaults": true,
                     "bypass": false,
+                    "touchAddress": "",
+                    "lineWidth": "auto"
+                  },
+                  {
+                    "type": "fader",
+                    "top": 30,
+                    "left": 430,
+                    "id": "abs_zoom",
+                    "visible": true,
+                    "interaction": true,
+                    "width": 50,
+                    "height": 230,
+                    "expand": "false",
+                    "colorBg": "auto",
+                    "colorText": "auto",
+                    "colorWidget": "auto",
+                    "colorStroke": "auto",
+                    "colorFill": "auto",
+                    "alphaStroke": "auto",
+                    "alphaFillOff": "auto",
+                    "alphaFillOn": "auto",
+                    "lineWidth": "auto",
+                    "padding": "auto",
+                    "css": "",
+                    "design": "default",
+                    "knobSize": 25,
+                    "horizontal": false,
+                    "pips": false,
+                    "dashed": false,
+                    "gradient": [],
+                    "snap": false,
+                    "spring": false,
+                    "doubleTap": false,
+                    "range": {
+                      "min": 0,
+                      "max": 100
+                    },
+                    "logScale": false,
+                    "sensitivity": 1,
+                    "steps": "",
+                    "origin": "auto",
+                    "value": "",
+                    "default": "",
+                    "linkId": "",
+                    "script": "set(\"input_zoom\",get(\"abs_zoom\"))",
+                    "address": "auto",
+                    "preArgs": "",
+                    "typeTags": "",
+                    "decimals": 2,
+                    "target": "",
+                    "ignoreDefaults": true,
+                    "bypass": false,
                     "touchAddress": ""
+                  },
+                  {
+                    "type": "button",
+                    "top": 300,
+                    "left": 410,
+                    "id": "go_zoom",
+                    "visible": true,
+                    "interaction": true,
+                    "width": 90,
+                    "height": 50,
+                    "expand": "false",
+                    "colorBg": "#440101",
+                    "colorText": "auto",
+                    "colorWidget": "auto",
+                    "colorStroke": "auto",
+                    "colorFill": "#fd6d6d",
+                    "alphaStroke": "auto",
+                    "alphaFillOff": "auto",
+                    "alphaFillOn": "auto",
+                    "padding": "auto",
+                    "css": "",
+                    "label": "GO Zoom",
+                    "on": 1,
+                    "off": 0,
+                    "mode": "tap",
+                    "doubleTap": false,
+                    "colorTextOn": "auto",
+                    "value": "",
+                    "default": "",
+                    "linkId": "",
+                    "script": "if (get(\"go_zoom\") ==1) {\nsend(\"192.168.50.183:8002\",\"/\"+get(\"camera_id\")+\"/zoom_direct\",get(\"input_zoom\"))\nset(\"abs_zoom_live\",get(\"input_zoom\"))\n} ",
+                    "address": "auto",
+                    "preArgs": "",
+                    "typeTags": "",
+                    "decimals": 2,
+                    "target": "",
+                    "ignoreDefaults": true,
+                    "bypass": false,
+                    "lineWidth": "auto"
+                  },
+                  {
+                    "type": "input",
+                    "top": 260,
+                    "left": 410,
+                    "id": "input_zoom",
+                    "visible": true,
+                    "interaction": true,
+                    "width": 60,
+                    "height": 40,
+                    "expand": "false",
+                    "colorBg": "auto",
+                    "colorText": "auto",
+                    "colorWidget": "auto",
+                    "colorStroke": "auto",
+                    "colorFill": "auto",
+                    "alphaStroke": "auto",
+                    "alphaFillOff": "auto",
+                    "alphaFillOn": "auto",
+                    "padding": "auto",
+                    "css": "",
+                    "align": "center",
+                    "unit": "",
+                    "asYouType": false,
+                    "value": "",
+                    "default": "",
+                    "linkId": "",
+                    "script": "set(\"abs_zoom\",get(\"input_zoom\"))",
+                    "address": "auto",
+                    "preArgs": "",
+                    "typeTags": "",
+                    "decimals": 2,
+                    "target": "",
+                    "ignoreDefaults": true,
+                    "bypass": false,
+                    "lineWidth": "auto"
+                  },
+                  {
+                    "type": "text",
+                    "top": 260,
+                    "left": 470,
+                    "id": "text_zoom",
+                    "visible": true,
+                    "width": 30,
+                    "height": 40,
+                    "expand": "false",
+                    "colorBg": "auto",
+                    "colorText": "auto",
+                    "colorWidget": "auto",
+                    "colorStroke": "auto",
+                    "colorFill": "auto",
+                    "alphaStroke": "auto",
+                    "alphaFillOff": "auto",
+                    "alphaFillOn": "auto",
+                    "padding": "auto",
+                    "css": "",
+                    "vertical": false,
+                    "wrap": false,
+                    "align": "center",
+                    "value": "%",
+                    "default": "",
+                    "linkId": "",
+                    "script": "",
+                    "address": "auto",
+                    "preArgs": "",
+                    "typeTags": "",
+                    "target": "",
+                    "ignoreDefaults": false,
+                    "lineWidth": "auto"
+                  },
+                  {
+                    "type": "text",
+                    "top": 90,
+                    "left": 470,
+                    "id": "text_zoom11",
+                    "visible": true,
+                    "width": 20,
+                    "height": 100,
+                    "expand": "false",
+                    "colorBg": "auto",
+                    "colorText": "auto",
+                    "colorWidget": "auto",
+                    "colorStroke": "auto",
+                    "colorFill": "auto",
+                    "alphaStroke": "auto",
+                    "alphaFillOff": "auto",
+                    "alphaFillOn": "auto",
+                    "padding": "auto",
+                    "css": "",
+                    "vertical": true,
+                    "wrap": false,
+                    "align": "center",
+                    "value": "ZOOM",
+                    "default": "",
+                    "linkId": "",
+                    "script": "",
+                    "address": "auto",
+                    "preArgs": "",
+                    "typeTags": "",
+                    "target": "",
+                    "ignoreDefaults": false,
+                    "lineWidth": "auto"
                   }
                 ],
-                "tabs": []
+                "tabs": [],
+                "lineWidth": "auto",
+                "contain": true
               },
               {
                 "type": "tab",
@@ -3327,7 +3612,7 @@
                     "value": "",
                     "default": "",
                     "linkId": "",
-                    "script": "send(\"192.168.50.183:8002\",\"/\"+get(\"camera_id\")+\"/pan_absolute_position\",get(\"pan_speed\"),get(\"tilt_speed\"),get(\"xy_cam2\")[0],get(\"xy_cam2\")[1])\nset(\"input_x1\",get(\"xy_cam2\")[0])\nset(\"input_y1\",get(\"xy_cam2\")[1])",
+                    "script": "send(\"192.168.50.183:8002\",\"/\"+get(\"camera_id\")+\"/pan_absolute_position\",20,20,get(\"xy_cam2\")[0],get(\"xy_cam2\")[1])\nset(\"input_x1\",get(\"xy_cam2\")[0])\nset(\"input_y1\",get(\"xy_cam2\")[1])",
                     "address": "/1/pan_test",
                     "preArgs": "",
                     "typeTags": "",
@@ -3335,7 +3620,8 @@
                     "target": "",
                     "ignoreDefaults": true,
                     "bypass": false,
-                    "touchAddress": ""
+                    "touchAddress": "",
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "input",
@@ -3370,7 +3656,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "input",
@@ -3405,7 +3692,8 @@
                     "decimals": 2,
                     "target": "",
                     "ignoreDefaults": true,
-                    "bypass": false
+                    "bypass": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "text",
@@ -3437,7 +3725,8 @@
                     "preArgs": "",
                     "typeTags": "",
                     "target": "",
-                    "ignoreDefaults": false
+                    "ignoreDefaults": false,
+                    "lineWidth": "auto"
                   },
                   {
                     "type": "text",
@@ -3469,12 +3758,170 @@
                     "preArgs": "",
                     "typeTags": "",
                     "target": "",
-                    "ignoreDefaults": false
+                    "ignoreDefaults": false,
+                    "lineWidth": "auto"
+                  },
+                  {
+                    "type": "fader",
+                    "top": 30,
+                    "left": 430,
+                    "id": "abs_zoom_live",
+                    "visible": true,
+                    "interaction": true,
+                    "width": 50,
+                    "height": 230,
+                    "expand": "false",
+                    "colorBg": "auto",
+                    "colorText": "auto",
+                    "colorWidget": "auto",
+                    "colorStroke": "auto",
+                    "colorFill": "auto",
+                    "alphaStroke": "auto",
+                    "alphaFillOff": "auto",
+                    "alphaFillOn": "auto",
+                    "lineWidth": "auto",
+                    "padding": "auto",
+                    "css": "",
+                    "design": "default",
+                    "knobSize": 25,
+                    "horizontal": false,
+                    "pips": false,
+                    "dashed": false,
+                    "gradient": [],
+                    "snap": false,
+                    "spring": false,
+                    "doubleTap": false,
+                    "range": {
+                      "min": 0,
+                      "max": 100
+                    },
+                    "logScale": false,
+                    "sensitivity": 1,
+                    "steps": "",
+                    "origin": "auto",
+                    "value": "",
+                    "default": "",
+                    "linkId": "",
+                    "script": "set(\"input_zoom2\",get(\"abs_zoom_live\"))\nsend(\"192.168.50.183:8002\",\"/\"+get(\"camera_id\")+\"/zoom_direct\",get(\"input_zoom2\"))\n\n",
+                    "address": "auto",
+                    "preArgs": "",
+                    "typeTags": "",
+                    "decimals": 2,
+                    "target": "",
+                    "ignoreDefaults": true,
+                    "bypass": false,
+                    "touchAddress": ""
+                  },
+                  {
+                    "type": "input",
+                    "top": 260,
+                    "left": 410,
+                    "id": "input_zoom2",
+                    "visible": true,
+                    "interaction": true,
+                    "width": 60,
+                    "height": 40,
+                    "expand": "false",
+                    "colorBg": "auto",
+                    "colorText": "auto",
+                    "colorWidget": "auto",
+                    "colorStroke": "auto",
+                    "colorFill": "auto",
+                    "alphaStroke": "auto",
+                    "alphaFillOff": "auto",
+                    "alphaFillOn": "auto",
+                    "padding": "auto",
+                    "css": "",
+                    "align": "center",
+                    "unit": "",
+                    "asYouType": false,
+                    "value": "",
+                    "default": "",
+                    "linkId": "",
+                    "script": "",
+                    "address": "auto",
+                    "preArgs": "",
+                    "typeTags": "",
+                    "decimals": 2,
+                    "target": "",
+                    "ignoreDefaults": true,
+                    "bypass": false,
+                    "lineWidth": "auto"
+                  },
+                  {
+                    "type": "text",
+                    "top": 260,
+                    "left": 470,
+                    "id": "text_zoom",
+                    "visible": true,
+                    "width": 30,
+                    "height": 40,
+                    "expand": "false",
+                    "colorBg": "auto",
+                    "colorText": "auto",
+                    "colorWidget": "auto",
+                    "colorStroke": "auto",
+                    "colorFill": "auto",
+                    "alphaStroke": "auto",
+                    "alphaFillOff": "auto",
+                    "alphaFillOn": "auto",
+                    "padding": "auto",
+                    "css": "",
+                    "vertical": false,
+                    "wrap": false,
+                    "align": "center",
+                    "value": "%",
+                    "default": "",
+                    "linkId": "",
+                    "script": "",
+                    "address": "auto",
+                    "preArgs": "",
+                    "typeTags": "",
+                    "target": "",
+                    "ignoreDefaults": false,
+                    "lineWidth": "auto"
+                  },
+                  {
+                    "type": "text",
+                    "top": 90,
+                    "left": 470,
+                    "id": "text_zoom11",
+                    "visible": true,
+                    "width": 20,
+                    "height": 100,
+                    "expand": "false",
+                    "colorBg": "auto",
+                    "colorText": "auto",
+                    "colorWidget": "auto",
+                    "colorStroke": "auto",
+                    "colorFill": "auto",
+                    "alphaStroke": "auto",
+                    "alphaFillOff": "auto",
+                    "alphaFillOn": "auto",
+                    "padding": "auto",
+                    "css": "",
+                    "vertical": true,
+                    "wrap": false,
+                    "align": "center",
+                    "value": "ZOOM",
+                    "default": "",
+                    "linkId": "",
+                    "script": "",
+                    "address": "auto",
+                    "preArgs": "",
+                    "typeTags": "",
+                    "target": "",
+                    "ignoreDefaults": false,
+                    "lineWidth": "auto"
                   }
                 ],
-                "tabs": []
+                "tabs": [],
+                "lineWidth": "auto",
+                "contain": true
               }
-            ]
+            ],
+            "lineWidth": "auto",
+            "contain": true
           },
           {
             "type": "text",
@@ -3506,14 +3953,19 @@
             "preArgs": "",
             "typeTags": "",
             "target": "",
-            "ignoreDefaults": false
+            "ignoreDefaults": false,
+            "lineWidth": "auto"
           }
         ],
-        "tabs": []
+        "tabs": [],
+        "lineWidth": "auto",
+        "contain": true
       }
     ],
-    "tabs": []
+    "tabs": [],
+    "lineWidth": "auto",
+    "contain": true
   },
-  "version": "1.0.0-beta10",
+  "version": "1.2.0",
   "type": "Open Stage Control session"
 }
