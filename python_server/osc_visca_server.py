@@ -95,6 +95,7 @@ camera_on = '81 01 04 00 02 FF'
 camera_off = '81 01 04 00 03 FF'
 information_display_off = '81 01 7E 01 18 03 FF'
 reset_seq = '02 00 00 01 00 00 00 01 01'
+command_cancel	= '81 21 FF'
 
 # --- Position Memory Commands ---
 memory_recall = '81 01 04 3F 02 0p FF' # p: Memory number (=0 to F)
@@ -104,12 +105,13 @@ memory_set = '81 01 04 3F 01 0p FF' # p: Memory number (=0 to F)
 focus_stop = '81 01 04 08 00 FF'
 focus_far = '81 01 04 08 02 FF'
 focus_near = '81 01 04 08 03 FF'
-focus_far_variable = '81 01 04 08 2p FF'.replace('p', '7') # 0 low to 7 high
-focus_near_variable = '81 01 04 08 3p FF'.replace('p', '7') # 0 low to 7 high
+focus_far_variable = '81 01 04 08 2p FF' # 0 low to 7 high
+focus_near_variable = '81 01 04 08 3p FF' # 0 low to 7 high
 focus_direct = '81 01 04 48 0p 0q 0r 0s FF' #.replace('p', ) q, r, s
 focus_auto = '81 01 04 38 02 FF'
 focus_manual = '81 01 04 38 03 FF'
 focus_infinity = '81 01 04 18 02 FF'
+focus_one_push = '81 01 04 18 01 FF'
 
 # --- Zoom Commands ---
 zoom_stop = '81 01 04 07 00 FF'
@@ -206,6 +208,34 @@ def zoomToHex(numZ):
     absZ = (minZ + scaleZ) & 0xffff
     
     return(hex(absZ)[2:].zfill(4))
+    
+    
+# --------------------------------------------------------
+# Function convert absolute zoom 
+# to VISCA command for BIRDDOG P200
+# --------------------------------------------------------
+def focusToHex(numZ):
+    
+    minZD = 0
+    maxZD = 100
+    rangeZD = maxZD - minZD
+    
+    
+    minZ = 0x0000
+    maxZ = 0x4000
+    rangeZ = maxZ - minZ
+    
+    
+    # Convert neg to positive
+    convZ = numZ - minZD
+    
+    # Scale and cast
+    scaleZ = int(round(convZ/rangeZD*rangeZ))
+    
+    absZ = (minZ + scaleZ) & 0xffff
+    
+    return(hex(absZ)[2:].zfill(4))
+    
     
 # ==============================================================
 #  VISCA (TO Birddog P200s) 
@@ -370,11 +400,28 @@ def parse_osc_message(osc_address, osc_path, args):
     elif 'focus' in osc_command:
         if osc_command == 'focus_auto':
             send_visca(focus_auto,camId)
-        if osc_argument > 0:
+        elif osc_command == 'focus_stop':
+            send_visca(focus_stop,camId)
+        elif osc_command == 'focus_one_push':
+            send_visca(focus_one_push,camId)
+                        
+        elif osc_command == 'focus_direct':
+            absF = zoomToHex(float(args[0])) #zoom and focus are same range
+#            print(absF)
+            focusCommand = focus_direct.replace('p', absF[0])
+            focusCommand = focusCommand.replace('q', absF[1])
+            focusCommand = focusCommand.replace('r', absF[2])
+            focusCommand = focusCommand.replace('s', absF[3])
+            send_visca(focusCommand,camId)
+            
+        elif osc_command == 'focus_manual':
+            send_visca(focus_manual,camId)
+        elif osc_argument > 0:
+            focusSpeed = str(int(min(7,args[0])))     
             if osc_command == 'focus_far':
-                send_visca(focus_far,camId)
+                send_visca(focus_far_variable.replace('p', focusSpeed),camId)
             elif osc_command == 'focus_near':
-                send_visca(focus_near,camId)
+                send_visca(focus_near_variable.replace('p', focusSpeed),camId)
         else: # when the button is released the osc_argument should be 0
             send_visca(focus_stop,camId)
             
