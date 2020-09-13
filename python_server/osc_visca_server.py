@@ -46,7 +46,7 @@ from math import floor  # for fader
 import socket
 import binascii  # for printing the visca messages
 import json
-
+import time
 # --------------------------------------------------------
 # Load config from JSON file
 # --------------------------------------------------------
@@ -65,26 +65,30 @@ osc_send_port = 9002
 # --------------------------------------------------------
 camInfo =configs["camInfo"]
 camipDic = {};
-# Get IP addrs from config json
+
+# Visca Port:
+camera_port = 52381
+buffer_size = 1024
+
+#rx = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+#rx.bind(('127.0.0.1', camera_port))
+#rx.settimeout(5.0) # only wait for a response for 1 second
+# Sequence number container
 seqNum = {}
+
+# Get IP, configure sequence number and sockets form JSON
 for this in range(camInfo["numCamera"]):
     ix = this+1;#"0" is the ALL signal, so we need to skip it
     thisCam = camInfo["camera"+str(ix)]
     camipDic[str(ix)] = thisCam["ip"] 
     seqNum[str(ix)] = 1;
     
-
-# Visca Port:
-camera_port = 52381
-buffer_size = 1024
-
-
 # --------------------------------------------------------
 # Visca Receiver Socket setup
 # TODO: Not working
 # --------------------------------------------------------
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IPv4, UDP
-s.bind(('', camera_port)) # for testing use the port one higher than the camera's port
+s.bind(('', camera_port+1)) # for testing use the port one higher than the camera's port
 s.settimeout(1.0) # only wait for a response for 1 second
 
 # --------------------------------------------------------
@@ -94,7 +98,8 @@ s.settimeout(1.0) # only wait for a response for 1 second
 camera_on = '81 01 04 00 02 FF'
 camera_off = '81 01 04 00 03 FF'
 information_display_off = '81 01 7E 01 18 03 FF'
-reset_seq = '02 00 00 01 00 00 00 01 01'
+IF_Clear = '88 01 00 01 FF' #	I/F Clear
+reset_seq = IF_Clear#'02 00 00 01 00 00 00 01 01'
 command_cancel	= '81 21 FF'
 
 # --- Position Memory Commands ---
@@ -243,41 +248,69 @@ def focusToHex(numZ):
 # --------------------------------------------------------
 # Send Visca Command 
 # --------------------------------------------------------
-def send_visca(message_string,camId="1"):
+def clearUdpBuffer(old_s, camId):
+    old_s.shutdown(1)
+    old_s.close()
+    global s
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IPv4, UDP
+    s.bind(('', camera_port+1)) # for testing use the port one higher than the camera's port
+    s.settimeout(1.0) # only wait for a response for 1 second
+    
+    #Send one
+    for thisKey in camipDic.keys():
+        camera_ip = camipDic[thisKey]
+        sequence_number = seqNum[camId]
+        payload_type = bytearray.fromhex('01 00')
+        payload = bytearray.fromhex(reset_seq)
+        payload_length = len(payload).to_bytes(2, 'big')
+        visca_message = payload_type + payload_length + sequence_number.to_bytes(4, 'big') + payload
+        s.sendto(visca_message, (camera_ip, camera_port))
+    
+    time.sleep(0.2)
+def send_visca(message_string,camId="1", skipCheck = False):
     # 0 is for all, do a forloop
     if camId =="0":
         for thisKey in camipDic.keys():
-            received_message = send_visca(message_string, camId=thisKey)  
+            received_message = send_visca(message_string, camId=thisKey, skipCheck=skipCheck)  
         return received_message
     
-    camera_ip = camipDic[camId]
-    sequence_number = seqNum[camId]
-    payload_type = bytearray.fromhex('01 00')
-    payload = bytearray.fromhex(message_string)
-    payload_length = len(payload).to_bytes(2, 'big')
-    visca_message = payload_type + payload_length + sequence_number.to_bytes(4, 'big') + payload
-    s.sendto(visca_message, (camera_ip, camera_port))
-    print(binascii.hexlify(visca_message), 'sent to', camera_ip, camera_port, sequence_number)
-    seqNum[camId] += 1
-    '''# wait for acknowledge and completion messages
-    try:
-        data = s.recvfrom(buffer_size)
-        received_message = binascii.hexlify(data[0])
-        #print('Received', received_message)
-        data = s.recvfrom(buffer_size)
-        received_message = binascii.hexlify(data[0])
-        if received_message == b'9051ff':
-            print('Received okay')
+    # If we dont get an acknoledge try again
+    for tries in range(5):
+        camera_ip = camipDic[camId]
+        sequence_number = seqNum[camId]
+        payload_type = bytearray.fromhex('01 00')
+        payload = bytearray.fromhex(message_string)
+        payload_length = len(payload).to_bytes(2, 'big')
+        visca_message = payload_type + payload_length + sequence_number.to_bytes(4, 'big') + payload
+        s.sendto(visca_message, (camera_ip, camera_port))
+        print(binascii.hexlify(visca_message), 'sent to', camera_ip, camera_port, sequence_number)
+        
+        if skipCheck:
+            received_message = "skipped check"
+            break
         else:
-            print('Error')
-        #print('Received', received_message)
-    except socket.timeout: # s.settimeout(2.0) #from above
-        received_message = 'No response from camera'
-        print(received_message)
-        send_osc('reset_sequence_number', 0.0)
-    #'''
-    received_message = 'test'
-    #return visca_message
+            # wait for acknowledge and completion messages
+            try:
+                data = s.recvfrom(buffer_size)
+                received_message = binascii.hexlify(data[0])
+                #print('Received', received_message[-8:])
+                #data = s.recvfrom(buffer_size)
+                #received_message = binascii.hexlify(data[0])
+                if received_message[-8:] == binascii.hexlify(bytes([seqNum[camId]]))+b'9051ff':
+#                    pass#print('Received okay')
+                    break
+                else:
+                    print('Error')
+                    clearUdpBuffer(s,camId)
+                
+                    #print('Received', received_message)
+            except socket.timeout: # s.settimeout(2.0) #from above
+                received_message = 'No response from camera'
+                print(received_message)
+                send_osc('reset_sequence_number', 0.0)
+            #
+            #return visca_message
+    seqNum[camId] += 1
     return received_message
 
 # --------------------------------------------------------
@@ -295,6 +328,7 @@ def reset_sequence_number_function(camId = "0"):  # this should probably be roll
         seqNum[camId] = sequence_number
         
     print('Reset sequence number to', sequence_number)
+    '''
     try:
         data = s.recvfrom(buffer_size)
         received_message = binascii.hexlify(data[0])
@@ -307,6 +341,7 @@ def reset_sequence_number_function(camId = "0"):  # this should probably be roll
         received_message = 'No response from camera'
         print(received_message)
         send_osc('reset_sequence_number', 0.0)
+    '''
     return sequence_number
 
 
@@ -381,7 +416,7 @@ def parse_osc_message(osc_address, osc_path, args):
             zoomCommand = zoomCommand.replace('r', absZ[2])
             zoomCommand = zoomCommand.replace('s', absZ[3])
 #            print(zoomCommand)
-            send_visca(zoomCommand,camId)
+            send_visca(zoomCommand,camId, skipCheck = True)
         elif osc_argument > 0:
             zoomSpeed = str(int(min(7,args[0])))           
             
@@ -412,7 +447,7 @@ def parse_osc_message(osc_address, osc_path, args):
             focusCommand = focusCommand.replace('q', absF[1])
             focusCommand = focusCommand.replace('r', absF[2])
             focusCommand = focusCommand.replace('s', absF[3])
-            send_visca(focusCommand,camId)
+            send_visca(focusCommand,camId, skipCheck = True)
             
         elif osc_command == 'focus_manual':
             send_visca(focus_manual,camId)
@@ -441,7 +476,7 @@ def parse_osc_message(osc_address, osc_path, args):
                 convMsg = pan_absolute_position.replace('VV', panSpeed).replace('WW', str(tiltSpeed))
                 convMsg = convMsg.replace('Y1',absP[0]).replace('Y2',absP[1]).replace('Y3',absP[2]).replace('Y4',absP[3])
                 convMsg = convMsg.replace('Z1',absT[0]).replace('Z2',absT[1]).replace('Z3',absT[2]).replace('Z4',absT[3])
-                send_visca(convMsg,camId)
+                send_visca(convMsg,camId, skipCheck = True)
                 
                 
             else: # when the button is released the osc_argument should be 0

@@ -1863,7 +1863,7 @@
           },
           {
             "type": "switch",
-            "top": 490,
+            "top": 480,
             "left": 970,
             "id": "camera_id",
             "visible": true,
@@ -3265,7 +3265,7 @@
                     "value": "",
                     "default": "",
                     "linkId": "",
-                    "script": "if (get(\"go_xy\") ==1) {\nsend(\"192.168.50.183:8002\",\"/\"+get(\"camera_id\")+\"/pan_absolute_position\",get(\"pan_speed\"),get(\"tilt_speed\"),get(\"xy_cam1\")[0],get(\"xy_cam1\")[1])\nset(\"xy_cam2\",[get(\"input_x\"),get(\"input_y\")])\n\n} ",
+                    "script": "if (get(\"go_xy\") ==1) {\nset(\"xy_cam2\",[get(\"input_x\"),get(\"input_y\")])\n\n} ",
                     "address": "auto",
                     "preArgs": "",
                     "typeTags": "",
