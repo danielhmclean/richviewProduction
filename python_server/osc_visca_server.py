@@ -66,16 +66,13 @@ osc_send_port = 9002
 camInfo =configs["camInfo"]
 camipDic = {};
 # Get IP addrs from config json
+seqNum = {}
 for this in range(camInfo["numCamera"]):
     ix = this+1;#"0" is the ALL signal, so we need to skip it
     thisCam = camInfo["camera"+str(ix)]
     camipDic[str(ix)] = thisCam["ip"] 
+    seqNum[str(ix)] = 1;
     
-print(camipDic)
-#camipDic = {
-#        "1":'192.168.50.40',
-#        "2":'192.168.50.28',
-#        "3":'192.168.50.111'}
 
 # Visca Port:
 camera_port = 52381
@@ -95,7 +92,9 @@ s.settimeout(1.0) # only wait for a response for 1 second
 # --------------------------------------------------------
 # --- Misc ---
 camera_on = '81 01 04 00 02 FF'
+camera_off = '81 01 04 00 03 FF'
 information_display_off = '81 01 7E 01 18 03 FF'
+reset_seq = '02 00 00 01 00 00 00 01 01'
 
 # --- Position Memory Commands ---
 memory_recall = '81 01 04 3F 02 0p FF' # p: Memory number (=0 to F)
@@ -222,14 +221,14 @@ def send_visca(message_string,camId="1"):
         return received_message
     
     camera_ip = camipDic[camId]
-    global sequence_number
+    sequence_number = seqNum[camId]
     payload_type = bytearray.fromhex('01 00')
     payload = bytearray.fromhex(message_string)
     payload_length = len(payload).to_bytes(2, 'big')
     visca_message = payload_type + payload_length + sequence_number.to_bytes(4, 'big') + payload
     s.sendto(visca_message, (camera_ip, camera_port))
     print(binascii.hexlify(visca_message), 'sent to', camera_ip, camera_port, sequence_number)
-    sequence_number += 1
+    seqNum[camId] += 1
     '''# wait for acknowledge and completion messages
     try:
         data = s.recvfrom(buffer_size)
@@ -256,12 +255,15 @@ def send_visca(message_string,camId="1"):
 # TODO: Check if this does anything or is necessary for
 #       Birddog P200
 # --------------------------------------------------------
-def reset_sequence_number_function(camId = "1"):  # this should probably be rolled into the send_visca function
-    camera_ip = camipDic[camId]
-    reset_sequence_number_message = bytearray.fromhex('02 00 00 01 00 00 00 01 01')
-    s.sendto(reset_sequence_number_message,(camera_ip, camera_port))
-    global sequence_number
+def reset_sequence_number_function(camId = "0"):  # this should probably be rolled into the send_visca function
+    send_visca(reset_seq,camId) # so that it doesn't display on-screen
     sequence_number = 1
+    if (camId == "0"):
+        for thisKey in camipDic.keys():
+            seqNum[thisKey] = sequence_number
+    else:
+        seqNum[camId] = sequence_number
+        
     print('Reset sequence number to', sequence_number)
     try:
         data = s.recvfrom(buffer_size)
@@ -316,10 +318,18 @@ def parse_osc_message(osc_address, osc_path, args):
     osc_argument = args[0]
 #    print (osc_command)
 #    print (osc_argument)
+
+    # ----- Camera On/off Commands -----
     if osc_command == 'camera_on':
         send_visca(camera_on,camId)
+    elif osc_command == 'camera_off':
+        send_visca(camera_off,camId)
+        
+    # ----- Reset Sequence -----
     elif osc_command == 'reset_sequence_number':
-        reset_sequence_number_function()
+        reset_sequence_number_function(camId)
+        
+    # ----- Memory Commands -----
     elif 'memory_' in osc_command:
         memory_preset_number = hex(int(osc_argument))[2:]
         if osc_argument > 0:
@@ -330,6 +340,8 @@ def parse_osc_message(osc_address, osc_path, args):
             elif 'set' in osc_command:
                 print('Memory set', memory_preset_number)
                 send_visca(memory_set.replace('p', memory_preset_number),camId)
+                
+    # ----- Zoom Commands -----
     elif 'zoom' in osc_command:
         if 'zoom_direct' in osc_command:
             absZ = zoomToHex(float(args[0]))
@@ -353,6 +365,8 @@ def parse_osc_message(osc_address, osc_path, args):
                 send_visca(zoom_wide_variable.replace('p', zoomSpeed),camId)
         else: # when the button is released the osc_argument should be 0
             send_visca(zoom_stop,camId)
+            
+    # ----- Focus Commands -----
     elif 'focus' in osc_command:
         if osc_command == 'focus_auto':
             send_visca(focus_auto,camId)
@@ -363,11 +377,8 @@ def parse_osc_message(osc_address, osc_path, args):
                 send_visca(focus_near,camId)
         else: # when the button is released the osc_argument should be 0
             send_visca(focus_stop,camId)
-    elif 'speed' in osc_command: # e.g. speed01 or speed15, from buttons not a slider
-        global movement_speed
-        movement_speed = osc_command[5:]
-        send_osc('MovementSpeedLabel', movement_speed)
-#        print('set speed to', movement_speed)
+            
+    # ----- Pan / Tilt Commands -----
     elif 'pan' in osc_command:
         
         # Absolute Position
@@ -389,7 +400,7 @@ def parse_osc_message(osc_address, osc_path, args):
             else: # when the button is released the osc_argument should be 0
                 send_visca(pan_stop,camId)
             
-        
+        # Pan home.... this one seems to break for some reason.
         elif 'pan_home' in osc_command:
             send_visca(pan_home,camId)
             
