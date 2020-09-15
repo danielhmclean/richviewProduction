@@ -18,9 +18,12 @@ Tracks: Prime
 
 Projector/Overlays: Propresenter
 
-## Free Software Components:
+## Free Software Components (required):
 
 Open Stage Control: https://github.com/jean-emmanuel/open-stage-control/releases
+MIDI (windows only):
+  For programs on local host, use loopMidi: https://www.tobias-erichsen.de/software/loopmidi.html
+  For programs on the network, use rtpMidi: http://www.tobias-erichsen.de/software/rtpmidi.html
 Python3: https://www.python.org/downloads/
     Packages:
 ```bash
@@ -29,11 +32,18 @@ Python3: https://www.python.org/downloads/
 ```
 
 ## Usage
+Server Side:
 Edit "osc_visca_server.py" to match IP addresses of cameras
 
-Run the python file "osc_visca_server.py" to start the OSC to VISCA server
-
-Launch and run the Open Stage Control, open the "richview_main.json" session
+Edit server batch file for correct midi information, and then run the server batchfile (windows):
+```bash
+          run/server.bat
+```
+Client side
+Edit client batch file for correct server IP information, and then run the client batchfile (windows):
+```bash
+          run/client.bat
+```
 
 **This will need updating as the Open Stage Control panel is built out
 
