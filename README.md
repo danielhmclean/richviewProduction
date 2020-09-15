@@ -6,10 +6,15 @@ managing and running the tech behind our sunday morning services
 ## Physical Components:
 
 Sound Board : Allen and Heath QU24
+
 Video Mixer: Black Magic HD Television
+
 Cameras: 2 x Cannon XA15
+
          3 x Birddog Eyes P200
+         
 Lightboard: ???
+
 Switch: ubiquiti pro 24 poe
 
 ## (Paid) Software Components:
@@ -21,10 +26,15 @@ Projector/Overlays: Propresenter
 ## Free Software Components (required):
 
 Open Stage Control: https://github.com/jean-emmanuel/open-stage-control/releases
+
 MIDI (windows only):
+
   For programs on local host, use loopMidi: https://www.tobias-erichsen.de/software/loopmidi.html
+  
   For programs on the network, use rtpMidi: http://www.tobias-erichsen.de/software/rtpmidi.html
+  
 Python3: https://www.python.org/downloads/
+
     Packages:
 ```bash
           pip3 install aiosc
@@ -33,6 +43,7 @@ Python3: https://www.python.org/downloads/
 
 ## Usage
 Server Side:
+
 Edit "osc_visca_server.py" to match IP addresses of cameras
 
 Edit server batch file for correct midi information, and then run the server batchfile (windows):
@@ -40,6 +51,7 @@ Edit server batch file for correct midi information, and then run the server bat
           run/server.bat
 ```
 Client side
+
 Edit client batch file for correct server IP information, and then run the client batchfile (windows):
 ```bash
           run/client.bat
