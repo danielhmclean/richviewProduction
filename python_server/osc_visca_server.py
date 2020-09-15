@@ -40,13 +40,19 @@ import asyncio # for receiving OSC
 import aiosc # for receiving OSC
 # pip3 install python-osc
 from pythonosc import udp_client # for sending OSC
+#import requests # For restful API
 
 # --- Standard ---
+
 from math import floor  # for fader
 import socket
 import binascii  # for printing the visca messages
 import json
 import time
+
+import threading
+
+
 # --------------------------------------------------------
 # Load config from JSON file
 # --------------------------------------------------------
@@ -57,8 +63,10 @@ with open('osc_visca_config.json') as json_file:
 # OSC server and client Settings (Open Stage Control)
 # --------------------------------------------------------
 osc_receive_port = 8002
-serverOSC_ip = '192.168.50.183' # there must be a way to listen for this... maybe osc_address[0]
-osc_send_port = 9002
+serverOSC_ip = '127.0.0.1' # there must be a way to listen for this... maybe osc_address[0]
+#osc_send_port = 9000
+osc_send_port = 8000
+
 
 # --------------------------------------------------------
 #  Camera Settings
@@ -75,13 +83,15 @@ buffer_size = 1024
 #rx.settimeout(5.0) # only wait for a response for 1 second
 # Sequence number container
 seqNum = {}
-
+lock = {}
 # Get IP, configure sequence number and sockets form JSON
 for this in range(camInfo["numCamera"]):
     ix = this+1;#"0" is the ALL signal, so we need to skip it
     thisCam = camInfo["camera"+str(ix)]
     camipDic[str(ix)] = thisCam["ip"] 
     seqNum[str(ix)] = 1;
+    lock[str(ix)] = threading.Lock()
+    
     
 # --------------------------------------------------------
 # Visca Receiver Socket setup
@@ -90,6 +100,11 @@ for this in range(camInfo["numCamera"]):
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IPv4, UDP
 s.bind(('', camera_port+1)) # for testing use the port one higher than the camera's port
 s.settimeout(1.0) # only wait for a response for 1 second
+
+# Status socket
+sStatus = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IPv4, UDP
+sStatus.bind(('192.168.50.183', camera_port-1)) # for testing use the port one higher than the camera's port
+sStatus.settimeout(5.0) # only wait for a response for 1 second
 
 # --------------------------------------------------------
 #  VISCA Commands (Payloads)
@@ -101,6 +116,8 @@ information_display_off = '81 01 7E 01 18 03 FF'
 IF_Clear = '88 01 00 01 FF' #	I/F Clear
 reset_seq = IF_Clear#'02 00 00 01 00 00 00 01 01'
 command_cancel	= '81 21 FF'
+
+networkSet = '88 30 01 ff'
 
 # --- Position Memory Commands ---
 memory_recall = '81 01 04 3F 02 0p FF' # p: Memory number (=0 to F)
@@ -260,14 +277,65 @@ def clearUdpBuffer(old_s, camId):
     for thisKey in camipDic.keys():
         camera_ip = camipDic[thisKey]
         sequence_number = seqNum[camId]
-        payload_type = bytearray.fromhex('01 00')
+        payload_type = bytearray.fromhex('01 00') # command
         payload = bytearray.fromhex(reset_seq)
         payload_length = len(payload).to_bytes(2, 'big')
         visca_message = payload_type + payload_length + sequence_number.to_bytes(4, 'big') + payload
         s.sendto(visca_message, (camera_ip, camera_port))
     
     time.sleep(0.2)
+    #send_visca(networkSet,camId)
+
+def send_visca_status(message_string,camId="1", skipCheck = False):
+    skipCheck = False # This isnt working fully yet
+    # 0 is for all, do a forloop
+    if camId =="0":
+        for thisKey in camipDic.keys():
+            received_message = send_visca_status(message_string, camId=thisKey, skipCheck=skipCheck)  
+        return received_message
+    
+    # If we dont get an acknoledge try again
+    camera_ip = camipDic[camId]
+    sequence_number = 1#seqNum[camId]
+    #payload_type = bytearray.fromhex('01 00') # command
+    payload_type = bytearray.fromhex('01 10') # Inquiry
+    payload = bytearray.fromhex(message_string)
+    payload_length = len(payload).to_bytes(2, 'big')
+    visca_message = payload_type + payload_length + sequence_number.to_bytes(4, 'big') + payload
+    
+    # Lock
+    lock[camId].acquire();
+    sStatus.sendto(visca_message, (camera_ip, camera_port))
+    #print(binascii.hexlify(visca_message), 'sent to', camera_ip, camera_port, sequence_number)
+    lock[camId].release();
+    
+    try:
+        data = sStatus.recvfrom(buffer_size)
+        received_message = binascii.hexlify(data[0])
+        #print('Received', received_message[-8:])
+        #data = s.recvfrom(buffer_size)
+        #received_message = binascii.hexlify(data[0])
+        
+    except socket.timeout: # s.settimeout(2.0) #from above
+        received_message = 'No response from camera'
+        
+    filteredMessage = received_message[19:-2]
+    #print('Received', filteredMessage)
+    return filteredMessage
+    
+def post_birddog_rest(target,jsonObj,camId="1"):
+    # 0 is for all, do a forloop
+    if camId =="0":
+        for thisKey in camipDic.keys():
+            received_message = post_birddog_rest(message_string, camId=thisKey)  
+        return received_message
+        
+    camera_ip = camipDic[camId]
+    url = "http://"+camera_ip + "/" + target
+    x = requests.post(url,json = jsonObj)
+        
 def send_visca(message_string,camId="1", skipCheck = False):
+    skipCheck = True # This isnt working fully yet
     # 0 is for all, do a forloop
     if camId =="0":
         for thisKey in camipDic.keys():
@@ -281,6 +349,8 @@ def send_visca(message_string,camId="1", skipCheck = False):
         payload_type = bytearray.fromhex('01 00')
         payload = bytearray.fromhex(message_string)
         payload_length = len(payload).to_bytes(2, 'big')
+        
+        lock[camId].acquire();
         visca_message = payload_type + payload_length + sequence_number.to_bytes(4, 'big') + payload
         s.sendto(visca_message, (camera_ip, camera_port))
         print(binascii.hexlify(visca_message), 'sent to', camera_ip, camera_port, sequence_number)
@@ -301,6 +371,7 @@ def send_visca(message_string,camId="1", skipCheck = False):
                     break
                 else:
                     print('Error')
+                    print(received_message)
                     clearUdpBuffer(s,camId)
                 
                     #print('Received', received_message)
@@ -310,6 +381,8 @@ def send_visca(message_string,camId="1", skipCheck = False):
                 send_osc('reset_sequence_number', 0.0)
             #
             #return visca_message
+            
+    lock[camId].release();
     seqNum[camId] += 1
     return received_message
 
@@ -327,6 +400,7 @@ def reset_sequence_number_function(camId = "0"):  # this should probably be roll
     else:
         seqNum[camId] = sequence_number
         
+    #send_visca(networkSet,camId)
     print('Reset sequence number to', sequence_number)
     '''
     try:
@@ -354,7 +428,7 @@ def reset_sequence_number_function(camId = "0"):  # this should probably be roll
 #        feed back from P200 to Open Stage Control
 # --------------------------------------------------------
 def send_osc(osc_command, osc_send_argument):
-    osc_message_to_send = '/1/' + osc_command
+    osc_message_to_send = "/"+osc_command
     osc_client = udp_client.SimpleUDPClient(serverOSC_ip, osc_send_port)
     osc_client.send_message(osc_message_to_send, osc_send_argument)
 
@@ -401,7 +475,7 @@ def parse_osc_message(osc_address, osc_path, args):
             if 'recall' in osc_command:
                 print('Memory recall', memory_preset_number)
                 send_visca(information_display_off,camId) # so that it doesn't display on-screen
-                send_visca(memory_recall.replace('p', memory_preset_number),camId)
+                send_visca(memory_recall.replace('p', memory_preset_number),camId, skipCheck = True)
             elif 'set' in osc_command:
                 print('Memory set', memory_preset_number)
                 send_visca(memory_set.replace('p', memory_preset_number),camId)
@@ -435,6 +509,8 @@ def parse_osc_message(osc_address, osc_path, args):
     elif 'focus' in osc_command:
         if osc_command == 'focus_auto':
             send_visca(focus_auto,camId)
+        elif osc_command == 'focus_manual':
+            send_visca(focus_manual,camId)
         elif osc_command == 'focus_stop':
             send_visca(focus_stop,camId)
         elif osc_command == 'focus_one_push':
@@ -449,8 +525,6 @@ def parse_osc_message(osc_address, osc_path, args):
             focusCommand = focusCommand.replace('s', absF[3])
             send_visca(focusCommand,camId, skipCheck = True)
             
-        elif osc_command == 'focus_manual':
-            send_visca(focus_manual,camId)
         elif osc_argument > 0:
             focusSpeed = str(int(min(7,args[0])))     
             if osc_command == 'focus_far':
@@ -485,6 +559,8 @@ def parse_osc_message(osc_address, osc_path, args):
         # Pan home.... this one seems to break for some reason.
         elif 'pan_home' in osc_command:
             send_visca(pan_home,camId)
+#            send_osc("EDIT",["led_1","value",1])
+            send_osc("led_1",1)
             
         else:  
             if args[0] > 0 or args[1] >0:
@@ -493,10 +569,59 @@ def parse_osc_message(osc_address, osc_path, args):
                 send_visca(panDic[osc_command].replace('VV', panSpeed).replace('WW', str(tiltSpeed)),camId)
             else: # when the button is released the osc_argument should be 0
                 send_visca(pan_stop,camId)
+                
+    # ---- TALLY LIGHTS ----
+    elif ("tally" in osc_command):
+        tallyOn = "81 0A 02 02 02 FF"
+        tallyOff = "81 0A 02 02 03 FF" 
+        tallyBlink = "81 0A 02 02 01 FF"
+        if args[0] ==2:
+            setTally =  tallyBlink
+        elif args[0] ==1:
+            setTally =  tallyOn
+        else:
+            setTally = tallyOff
+            
+        send_visca(setTally,camId)
+
+#        target = "birddogavsetup"
+#        setting='av_nditally'
+#        jsonObj = {setting:setTally}
+#        post_birddog_rest(target,jsonObj,camId="1")
+
     else:
         print("I don't know what to do with", osc_command, osc_argument)
     send_osc('SentMessageLabel', osc_command)
 
+CAM_FocusModeInq = '81 09 04 38 FF' #	y0 50 02 FF	Auto Focus
+                                    #   y0 50 03 FF	Manual Focus
+CAM_versionInq = '81 09 00 02 FF'
+                     
+network_set = "88 30 01 ff"
+
+def get_updates(toggler):
+    
+    for thisKey in camipDic.keys():
+        # Focus mode
+        focusMode = send_visca_status(CAM_FocusModeInq,camId=thisKey)
+        if focusMode == b'002':
+            send_osc("led_af_"+thisKey,1) #Auto Focus on
+        else:
+            send_osc("led_af_"+thisKey,0) # Auto focus off
+    # Send update to OSC
+        
+    #send_osc("led_1",toggler)
+    
+
+    return
+
+def osc_update_thread():
+    updateInterval = 3 #seconds
+    toggler = 1;
+    while(True):
+        time.sleep(updateInterval)
+        get_updates(toggler)
+        toggler = toggler ^ 1;
 
 # --------------------------------------------------------
 #  Main Routine
@@ -505,6 +630,13 @@ def parse_osc_message(osc_address, osc_path, args):
 sequence_number = 1 # a global variable that we'll iterate each command, remember 0x0001
 reset_sequence_number_function()
 
+## Test: 
+#osc_update_thread()
+#
+## Launch Status Update Thread:
+x = threading.Thread(target=osc_update_thread)#,args=(schedUpdate,))
+x.start()
+    
 # Then start the OSC server to receive messages
 receive_loop = asyncio.get_event_loop()
 coro = receive_loop.create_datagram_endpoint(protocol_factory, local_addr=('0.0.0.0', osc_receive_port))
