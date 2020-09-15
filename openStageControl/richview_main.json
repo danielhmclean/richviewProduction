@@ -3965,7 +3965,7 @@
                     "unit": "",
                     "asYouType": false,
                     "value": "",
-                    "default": "",
+                    "default": 0,
                     "linkId": "",
                     "script": "",
                     "address": "auto",
