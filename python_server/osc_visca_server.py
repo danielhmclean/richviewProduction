@@ -103,7 +103,7 @@ s.settimeout(1.0) # only wait for a response for 1 second
 
 # Status socket
 sStatus = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IPv4, UDP
-sStatus.bind(('192.168.50.183', camera_port-1)) # for testing use the port one higher than the camera's port
+sStatus.bind(('', camera_port-1)) # for testing use the port one higher than the camera's port
 sStatus.settimeout(5.0) # only wait for a response for 1 second
 
 # --------------------------------------------------------
